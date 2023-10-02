@@ -2,7 +2,7 @@ import json
 import os
 from googleapiclient.discovery import build
 
-api_key: str = 'AIzaSyAUQCAV98IhpxiAFMP_Luu-mpicoI3JUGc'
+api_key: str = os.getenv('YOUTUBE_ANALYTICS_KEY')
 #os.getenv('YOUTUBE_ANALYTICS_KEY') не работает, пишет: Your default credentials were not found.
 youtube = build('youtube', 'v3', developerKey=api_key)
 
