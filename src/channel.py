@@ -22,6 +22,31 @@ class Channel:
 
         self.get_channel_info()
 
+    def __str__(self):
+        """Возвращает название и ссылку на канал по шаблону `<название_канала> (<ссылка_на_канал>)`"""
+        return f'{self.title} ({self.url})'
+
+    def __add__(self, other):
+        return int(self.subscriber_count) + int(other.subscriber_count)
+
+    def __sub__(self, other):
+        return int(self.subscriber_count) - int(other.subscriber_count)
+
+    def __gt__(self, other):
+        return int(self.subscriber_count) > int(other.subscriber_count)
+
+    def __ge__(self, other):
+        return int(self.subscriber_count) >= int(other.subscriber_count)
+
+    def __lt__(self, other):
+        return int(self.subscriber_count) < int(other.subscriber_count)
+
+    def __le__(self, other):
+        return int(self.subscriber_count) <= int(other.subscriber_count)
+
+    def __eq__(self, other):
+        return int(self.subscriber_count) == int(other.subscriber_count)
+
     def get_channel_info(self):
         """Получает информацию о канале с помощью YouTube API и заполняет атрибуты данными"""
         channel = youtube.channels().list(id=self.__channel_id, part='snippet,statistics').execute()
