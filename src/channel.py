@@ -2,13 +2,11 @@ import json
 import os
 from googleapiclient.discovery import build
 
-api_key: str = os.getenv('YOUTUBE_ANALYTICS_KEY')
-
-youtube = build('youtube', 'v3', developerKey=api_key)
-
 
 class Channel:
     """Класс для ютуб-канала"""
+
+    youtube = None
 
     def __init__(self, channel_id):
         """Экземпляр инициализируется id канала. Дальше все данные будут подтягиваться по API."""
@@ -19,6 +17,8 @@ class Channel:
         self.subscriber_count = None
         self.video_count = None
         self.view_count = None
+        self.api_key = os.getenv('YOUTUBE_ANALYTICS_KEY')
+        self.youtube = build('youtube', 'v3', developerKey=self.api_key)
 
         self.get_channel_info()
 
@@ -49,7 +49,7 @@ class Channel:
 
     def get_channel_info(self):
         """Получает информацию о канале с помощью YouTube API и заполняет атрибуты данными"""
-        channel = youtube.channels().list(id=self.__channel_id, part='snippet,statistics').execute()
+        channel = self.youtube.channels().list(id=self.__channel_id, part='snippet,statistics').execute()
         if 'items' in channel and len(channel['items']) > 0:
             item = channel['items'][0]
             snippet = item['snippet']
@@ -76,7 +76,7 @@ class Channel:
     @classmethod
     def get_service(cls):
         """Возвращает объект для работы с YouTube API"""
-        return youtube
+        return cls.youtube
 
     def to_json(self, filename):
         """Сохраняет значения атрибутов экземпляра Channel в файл в формате JSON"""
@@ -94,5 +94,5 @@ class Channel:
 
     def print_info(self):
         """Выводит в консоль информацию о канале."""
-        channel = youtube.channels().list(id=self.__channel_id, part='snippet,statistics').execute()
+        channel = self.youtube.channels().list(id=self.__channel_id, part='snippet,statistics').execute()
         print(json.dumps(channel, indent=2, ensure_ascii=False))
