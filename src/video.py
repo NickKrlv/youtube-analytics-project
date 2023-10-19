@@ -32,10 +32,6 @@ class Video:
 class PLVideo(Video):
     def __init__(self, video_id: str, playlist_id: str):
         super().__init__(video_id)
-        self.title = None
-        self.url = None
-        self.view_count = None
-        self.like_count = None
         self.playlist_id = playlist_id
 
         self.get_video_info()
